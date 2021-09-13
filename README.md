@@ -1,1 +1,5 @@
-# 5_classic_games
+# 4_classic_games
+* pong
+* snake
+* connect4
+* tetris 
