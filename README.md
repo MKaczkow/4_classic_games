@@ -2,4 +2,7 @@
 * pong
 * snake
 * connect4
-* tetris 
+* tetris
+
+
+... just for fun ...

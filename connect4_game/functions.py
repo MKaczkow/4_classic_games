@@ -1,10 +1,41 @@
 import numpy as np
-from connect4_game.config import ROW_COUNT, COLUMN_COUNT
+import pygame
+
+from connect4_game.config import (
+    ROW_COUNT,
+    COLUMN_COUNT,
+    SQUARESIZE,
+    BLUE,
+    BLACK,
+    YELLOW,
+    RED,
+    RADIUS,
+    PLAYER_0,
+    PLAYER_1
+)
 
 
 def create_board(row_count, column_count):
     board = np.zeros((row_count, column_count))
     return board
+
+
+def draw_board(board, screen):
+    height = (ROW_COUNT + 1) * SQUARESIZE
+
+    for c in range(COLUMN_COUNT):
+        for r in range(ROW_COUNT):
+            pygame.draw.rect(screen, BLUE, (c*SQUARESIZE, (r + 1)*SQUARESIZE, SQUARESIZE, SQUARESIZE))
+            pygame.draw.circle(screen, BLACK, (int((c + 0.5)*SQUARESIZE), int((r + 1.5)*SQUARESIZE)), RADIUS)
+
+    for c in range(COLUMN_COUNT):
+        for r in range(ROW_COUNT):
+            if board[r][c] == PLAYER_0:
+                pygame.draw.circle(screen, RED, (int((c + 0.5)*SQUARESIZE), int(height - (r + 0.5)*SQUARESIZE)), RADIUS)
+            elif board[r][c] == PLAYER_1:
+                pygame.draw.circle(screen, YELLOW, (int((c + 0.5)*SQUARESIZE), int(height - (r + 0.5)*SQUARESIZE)), RADIUS)
+
+    pygame.display.update()
 
 
 def drop_piece(board, row, column, piece):
