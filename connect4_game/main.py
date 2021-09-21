@@ -7,7 +7,6 @@ from connect4_game.functions import (
     drop_piece,
     is_valid_location,
     get_next_open_row,
-    print_board,
     winning_move,
     draw_board
 )
