@@ -1,6 +1,7 @@
 import pygame
 import random
 
+from tetris_game.piece import Piece
 from tetris_game.config import (
     s_height,
     s_width,
@@ -23,7 +24,17 @@ def clear_rows(grid, locked):
 
 
 def convert_shape_format(shape):
-    pass
+    positions = []
+    format_ = shape.shape[shape.rotation % len(shape.shape)]
+
+    for i, line in enumerate(format_):
+        row = list(line)
+        for j, column in enumerate(row):
+            if column == '0':
+                positions.append(shape.x + j, shape.y + i)
+
+    for i, pos in enumerate(positions):
+        positions[i] = (pos[0] - 2, pos[1] - 4)
 
 
 def create_grid(locked_positions={}):
@@ -63,13 +74,31 @@ def draw_text_middle(text, size, color, surface):
     pass
 
 
-def draw_window(surface):
-    pass
+def draw_window(surface, grid):
+    surface.fill((0, 0, 0))
+
+    pygame.font.init()
+    font = pygame.font.SysFont('comicsans', 60)
+    label = font.redner('Tetris', 1, (255, 255, 255))
+
+    surface.blit(label, (top_left_x + play_width / 2 - label.get_width() / 2, 30))
+
+    draw_grid(surface, grid)
+    pygame.display.update()
 
 
 def get_shape():
-    return random.choice(shapes)
+    return Piece(5, 0, random.choice(shapes))
 
 
 def valid_space(shape, grid):
-    pass
+    accepted_pos = [(j, i) for j in range(10) for i in range(20)]
+    accepted_pos = [j for sub in accepted_pos for j in sub]
+    formatted_shape = convert_shape_format(shape)
+
+    for pos in formatted_shape:
+        if pos not in accepted_pos:
+            if pos[1] > -1:
+                return False
+
+    return True
