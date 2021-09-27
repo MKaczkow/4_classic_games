@@ -16,7 +16,12 @@ from tetris_game.config import (
 
 
 def check_lost(positions):
-    pass
+    for pos in positions:
+        _, y = pos
+        if y < 1:
+            return True
+
+    return False
 
 
 def clear_rows(grid, locked):
@@ -35,6 +40,8 @@ def convert_shape_format(shape):
 
     for i, pos in enumerate(positions):
         positions[i] = (pos[0] - 2, pos[1] - 4)
+
+    return positions
 
 
 def create_grid(locked_positions={}):
