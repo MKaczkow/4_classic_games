@@ -2,7 +2,7 @@ import pygame
 import random
 
 from tetris_game.piece import Piece
-from tetris_game.functions import  (
+from tetris_game.functions import (
     check_lost,
     clear_rows,
     convert_shape_format,
@@ -33,7 +33,7 @@ represented in order by 0 - 6
 """
 
 
-def main(win):
+def main():
     global grid
 
     locked_positions = {}
@@ -89,45 +89,40 @@ def main(win):
                     if not valid_space(current_piece, grid):
                         current_piece.y -= 1
 
-            if event.key == pygame.K_SPACE:
-                while valid_space(current_piece, grid):
-                    current_piece.y += 1
-                current_piece.y -= 1
+        shape_pos = convert_shape_format(current_piece)
 
-    shape_pos = convert_shape_format(current_piece)
+        # add piece to the grid for drawing
+        for i in range(len(shape_pos)):
+            x, y = shape_pos[i]
+            if y > -1:
+                grid[y][x] = current_piece.color
 
-    # add piece to the grid for drawing
-    for i in range(len(shape_pos)):
-        x, y = shape_pos[i]
-        if y > -1:
-            grid[y][x] = current_piece.color
+        # IF PIECE HIT GROUND
+        if change_piece:
+            for pos in shape_pos:
+                p = (pos[0], pos[1])
+                locked_positions[p] = current_piece.color
+            current_piece = next_piece
+            next_piece = get_shape()
+            change_piece = False
 
-    # IF PIECE HIT GROUND
-    if change_piece:
-        for pos in shape_pos:
-            p = (pos[0], pos[1])
-            locked_positions[p] = current_piece.color
-        current_piece = next_piece
-        next_piece = get_shape()
-        change_piece = False
+            # call four times to check for multiple clear rows
+            clear_rows(grid, locked_positions)
 
-        # call four times to check for multiple clear rows
-        clear_rows(grid, locked_positions)
+        draw_window(win, grid)
+        draw_next_shape(next_piece, win)
+        pygame.display.update()
 
-    draw_window(win)
-    draw_next_shape(next_piece, win)
-    pygame.display.update()
-
-    # Check if user lost
-    if check_lost(locked_positions):
-        run = False
+        # Check if user lost
+        if check_lost(locked_positions):
+            run = False
 
     draw_text_middle("You Lost", 40, (255, 255, 255), win)
     pygame.display.update()
     pygame.time.delay(2000)
 
 
-def main_menu(win):
+def main_menu():
     run = True
     while run:
         win.fill((0, 0, 0))
@@ -137,9 +132,14 @@ def main_menu(win):
             if event.type == pygame.QUIT:
                 run = False
 
+            if event.type == pygame.KEYDOWN:
+                main()
+
+    pygame.quit()
+
 
 if __name__ == "__main__":
     win = pygame.display.set_mode((s_width, s_height))
     pygame.display.set_caption('Tetris')
     pygame.font.init()
-    main_menu(win)
+    main_menu()
