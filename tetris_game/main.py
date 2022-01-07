@@ -1,8 +1,8 @@
 import pygame
 import random
 
-from tetris_game.piece import Piece
-from tetris_game.functions import (
+from piece import Piece
+from functions import (
     check_lost,
     clear_rows,
     convert_shape_format,
@@ -14,16 +14,9 @@ from tetris_game.functions import (
     get_shape,
     valid_space
 )
-from tetris_game.config import (
+from config import (
     s_height,
     s_width,
-    play_height,
-    play_width,
-    block_size,
-    top_left_x,
-    top_left_y,
-    shapes,
-    shape_colors
 )
 
 """
@@ -97,7 +90,6 @@ def main():
             if y > -1:
                 grid[y][x] = current_piece.color
 
-        # IF PIECE HIT GROUND
         if change_piece:
             for pos in shape_pos:
                 p = (pos[0], pos[1])

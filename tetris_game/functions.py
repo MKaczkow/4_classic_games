@@ -1,17 +1,13 @@
 import pygame
 import random
 
-from tetris_game.piece import Piece
-from tetris_game.config import (
-    s_height,
-    s_width,
+from piece import Piece
+from config import (
     play_height,
     play_width,
-    block_size,
     top_left_x,
     top_left_y,
     shapes,
-    shape_colors
 )
 
 
@@ -56,8 +52,8 @@ def convert_shape_format(shape):
             if column == '0':
                 positions.append((shape.x + j, shape.y + i))
 
-        for i, pos in enumerate(positions):
-            positions[i] = (pos[0] - 2, pos[1] - 4)
+    for i, pos in enumerate(positions):
+        positions[i] = (pos[0] - 2, pos[1] - 4)
 
     return positions
 
